@@ -2,10 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const authRoutes = require('./routes/authRoutes');
-const profileRoutes = require('./routes/profileRoutes');  // Import profileRoutes
+const profileRoutes = require('./routes/profileRoutes'); // Import profileRoutes
 const historyRoutes = require('./routes/historyRoutes');
-const translationRoutes = require('./routes/translationRoutes');  // Import translationRoutes
-const { db, admin } = require('./db');  // Import db and admin
+const translationRoutes = require('./routes/translationRoutes'); // Import translationRoutes
+const articleRoutes = require('./routes/articleRoutes');
+const { db, admin } = require('./db'); // Import db and admin
 
 const app = express();
 
@@ -30,9 +31,10 @@ const authenticate = async (req, res, next) => {
 
 // Route configurations
 app.use('/api/auth', authRoutes);
-app.use('/api/profile', authenticate, profileRoutes);  // Pastikan di sini
-app.use('/api/history', authenticate, historyRoutes);  // Pastikan di sini
-app.use('/api/translation', authenticate, translationRoutes);  // Pastikan di sini
+app.use('/api/profile', authenticate, profileRoutes); // Pastikan di sini
+app.use('/api/history', authenticate, historyRoutes); // Pastikan di sini
+app.use('/api/translation', authenticate, translationRoutes); // Pastikan di sini
+app.use('/api/articles', authenticate, articleRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 8080;
