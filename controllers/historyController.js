@@ -24,7 +24,7 @@ exports.getHistory = async (req, res) => {
 
 exports.deleteHistory = async (req, res) => {
   try {
-    const { historyId } = req.body;
+    const { historyId } = req.query;
 
     if (!historyId) {
       return res.status(400).json({ error: true, msg: 'Missing required historyId in request body' });
@@ -39,7 +39,7 @@ exports.deleteHistory = async (req, res) => {
 
     await docRef.delete();
 
-    res.status(200).json({ error: true, message: 'History entry deleted successfully' });
+    res.status(200).json({ error: false, msg: 'History entry deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: true, msg: error.message });
   }
