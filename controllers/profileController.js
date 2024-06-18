@@ -6,7 +6,7 @@ exports.updateProfile = async (req, res) => {
     const userEmail = req.user.email;
 
     if (!firstName || !lastName) {
-      return res.status(400).send('First name and last name are required');
+      return res.status(400).json({ error: true, msg: 'First name and last name are required' });
     }
 
     await db.collection('users').doc(userEmail).update({
@@ -15,8 +15,8 @@ exports.updateProfile = async (req, res) => {
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    res.status(200).send('User profile updated successfully');
+    res.status(200).json({ error: false, msg: 'User profile updated successfully' });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json({ error: true, msg: error.message });
   }
 };

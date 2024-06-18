@@ -12,13 +12,6 @@ exports.addTranslation = async (req, res) => {
     const userEmail = req.user.email;
     const timestamp = admin.firestore.FieldValue.serverTimestamp();
 
-    // Add to translations collection
-    await db.collection('translations').add({
-      email: userEmail,
-      translatedText,
-      createdAt: timestamp,
-    });
-
     // Add to history collection
     await db.collection('history').add({
       email: userEmail,
@@ -26,8 +19,14 @@ exports.addTranslation = async (req, res) => {
       createdAt: timestamp,
     });
 
-    res.status(201).send('Translation added successfully');
+    res.status(201).json({
+      error: false,
+      msg: 'Translation added successfully'
+    });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json({
+      error: true,
+      msg: error.message
+    });
   }
 };

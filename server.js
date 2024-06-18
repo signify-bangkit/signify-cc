@@ -18,14 +18,17 @@ app.use(express.urlencoded({ extended: true }));
 const authenticate = async (req, res, next) => {
   const token = req.headers.authorization?.split('Bearer ')[1];
   if (!token) {
-    return res.status(401).send('Unauthorized');
+    return res.status(401).json({ error: true, msg: 'Unauthorized' });
   }
   try {
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
     req.user = decodedToken;
     next();
   } catch (error) {
-    res.status(401).send('Unauthorized');
+    res.status(401).json({
+      error: true,
+      msg: 'Unauthorized'
+    });
   }
 };
 

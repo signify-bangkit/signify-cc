@@ -14,7 +14,7 @@ exports.register = async (req, res) => {
 
     const userDoc = await getUserByEmail(email);
     if (userDoc.exists) {
-      return res.status(400).send({ error: true, msg: 'User already exists' });
+      return res.status(400).json({ error: true, msg: 'User already exists' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -22,7 +22,7 @@ exports.register = async (req, res) => {
 
     res.status(201).json({ error: false, msg: 'User registered successfully' });
   } catch (error) {
-    res.status(500).send({ error: true, msg: error.message });
+    res.status(500).json({ error: true, msg: error.message });
   }
 };
 
@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
     const user = userDoc.data();
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).send({ error: true, msg: 'Invalid password' });
+      return res.status(401).json({ error: true, msg: 'Invalid password' });
     }
 
     const token = jwt.sign(
@@ -60,6 +60,6 @@ exports.login = async (req, res) => {
       token
     });
   } catch (error) {
-    res.status(500).send(error.message);
+    res.status(500).json({ error: true, msg: error.message });
   }
 };
