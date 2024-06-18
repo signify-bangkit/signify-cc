@@ -15,7 +15,10 @@ exports.updateProfile = async (req, res) => {
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    res.status(200).json({ error: false, msg: 'User profile updated successfully' });
+    const userDoc = await db.collection('users').doc(userEmail).get();
+    const currentData = userDoc.data();
+
+    res.status(200).json({ error: false, msg: 'User profile updated successfully', results: currentData });
   } catch (error) {
     res.status(500).json({ error: true, msg: error.message });
   }
